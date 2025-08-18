@@ -1,0 +1,21 @@
+[
+  {
+    "title": "Bellabeat Fitbit Case Study",
+    "subtitle": "Steps, sleep, calories → marketing recommendations",
+    "thumb": "bellabeat/plots/01_avg_steps_weekday.png",
+    "tags": ["R", "ggplot2", "EDA"],
+    "links": [
+      {"label": "Report", "href": "bellabeat/Bellabeat_Case_Study.html", "type": "report"},
+      {"label": "PDF", "href": "bellabeat/Bellabeat_Case_Study.pdf", "type": "pdf"},
+      {"label": "Code", "href": "https://github.com/tjf2015/bellabeat-fitbit-case-study", "type": "code"}
+    ]
+  },
+  {
+    "title": "Coming Soon",
+    "subtitle": "Add your next project here — pipeline, dashboard, ML mini-build",
+    "thumb": "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop",
+    "tags": ["Python", "Pandas", "SQL"],
+    "links": []
+  }
+  
+]
