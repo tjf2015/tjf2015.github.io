@@ -78,41 +78,25 @@
     </div>
   </header>
 
-  <section id="about" class="pt-14 pb-10">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-10 items-center">
-      <div class="lg:col-span-7">
-        <span class="inline-flex items-center gap-2 text-sm font-semibold bg-brand-primary/10 text-brand-primary border border-brand-primary/20 px-3 py-1 rounded-full">
-          <i class="bi bi-stars"></i> Software Development • Data Analytics • Technical Operations
-        </span>
-        <h1 class="text-4xl sm:text-5xl font-extrabold mt-4">
-          A Full-Stack Developer with a foundation in systems and data.
-        </h1>
-        <p class="mt-4 text-slate-700 leading-relaxed">
-         I’m Tim, and I thrive on solving problems—whether it was keeping Apache helicopters mission-ready in the Army, troubleshooting software, or finding insights hidden in messy datasets. With 17 years of high-stakes experience in military aviation, I bring discipline, precision, and the ability to stay calm under pressure into everything I do. I’ve transitioned from wrenching on multimillion-dollar helicopters to coding full-stack applications and analyzing data to drive business decisions.<br><br>
-
-        But I’m more than my work history. I’m a lifelong learner who loves building things—apps, data visualizations, and even intricate Excel sheets that make life easier. Outside of tech, I’m a husband, dad, and family-first person who values the people closest to me above all else. I recharge by hiking Arizona trails, hitting the gym, camping under the stars, and yes—dancing (because life should be fun).<br><br>
-        I believe in blending professionalism with personality. I want any team I join to know they’re not just getting a reliable problem-solver—they’re getting someone who shows up with curiosity, resilience, and a sense of humor.
-        </p>
-         <p class="mt-4 text-slate-700 leading-relaxed">
-          When I'm not coding or analyzing data, I'm family-first, usually with <span style="color: #8400ff; "><strong>purple</strong></span> hair—who loves gaming, Harry Potter, hiking, camping, and hitting the gym.
-        </p>
-        <div class="flex flex-wrap gap-3 mt-6">
-          <a href="#projects" class="btn-grad text-white font-bold px-5 py-3 rounded-lg shadow-md hover:brightness-105">
-            <i class="bi bi-grid-3x3-gap-fill mr-2"></i> See My Work
-          </a>
-          <a href="mailto:tjfoltz2@gmail.com" class="border border-brand-primary/40 text-brand-primary px-5 py-3 rounded-lg hover:bg-brand-primary/10">
-            <i class="bi bi-envelope mr-2"></i> Email Me
-          </a>
-          <a href="https://www.linkedin.com/in/timothy-j-foltz/" target="_blank" rel="noopener"
-             class="border border-brand-secondary/50 text-brand-secondary px-5 py-3 rounded-lg hover:bg-brand-secondary/10">
-            <i class="bi bi-linkedin mr-2"></i> LinkedIn
-          </a>
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+          <span class="badge-pill mb-3">Data Analyst • R • Python • SQL</span>
+          <h1 class="display-4">Turning messy data into <span style="color:var(--brand-orange)">clear decisions</span>.</h1>
+          <p class="lead muted mt-3">I analyze real‑world datasets and ship actionable insights. Featured here: the Bellabeat Fitbit Case Study.</p>
+          <div class="mt-4 d-flex flex-wrap gap-2">
+            <a class="cta-btn" href="#projects"><i class="bi bi-grid-3x3-gap-fill me-2"></i>View Projects</a>
+            <a class="btn btn-outline-light px-4 py-2" href="mailto:tjfoltz2@gmail.com"><i class="bi bi-envelope me-2"></i>Contact</a>
+            <a class="btn btn-outline-warning px-4 py-2" href="https://www.linkedin.com/in/timothy-j-foltz/" target="_blank" rel="noopener"><i class="bi bi-linkedin me-2"></i>LinkedIn</a>
+          </div>
         </div>
-      </div>
-      <div class="lg:col-span-5">
-        <div class="rounded-2xl p-2 bg-white border border-slate-200 shadow-card">
-          <img src="assets/Tim_profile_pic.png" alt="Abstract code on a screen"
-               class="w-full h-auto rounded-xl bg-white object-cover">
+        <div class="col-lg-5">
+          <div class="section-card p-2">
+            <!-- White background baked into the image recommended -->
+            <img class="w-100 rounded" src="bellabeat/plots/03_steps_vs_sleep_hours.png" alt="Steps × Sleep Heatmap">
+          </div>
         </div>
         <p class="text-xs text-slate-500 mt-2 text-center">I build clean code and derive clear insights from data.</p>
       </div>
@@ -180,120 +164,89 @@
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
       <h2 class="text-3xl font-extrabold mb-6">Projects</h2>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <article class="rounded-2xl bg-white border border-slate-200 shadow-card overflow-hidden">
-          <a href="assets/dbt_journal_app.png" target="_blank"><img src="assets/dbt_journal_app.png" alt="DBT Journal App preview"
-               class="w-full h-44 object-cover bg-white"></img></a>
-          <div class="p-4">
-            <h3 class="font-semibold">DBT Journal Desktop App</h3>
-            <p class="text-sm text-slate-700 mt-1">
-             A self-reflection and tracking application designed to support Dialectical Behavior Therapy (DBT) practices. 
-             This project allows users to log their daily emotions, urges, and actions, while also recording the DBT skills they used throughout the day.
-            </p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="chip text-xs rounded-full px-2 py-1">Python</span>
-              <span class="chip text-xs rounded-full px-2 py-1">JSON</span>
-              <span class="chip text-xs rounded-full px-2 py-1">UI/UX</span>
-            
-              <a class="chip text-xs rounded-full px-2 py-1"
-                 href="https://dbt-daily-journal-foltz2.streamlit.app/"target="_blank" rel="noopener noreferrer">Link to Demo</a>
-
+      <div class="row g-4">
+        <!-- Bellabeat Card -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card h-100">
+            <img class="project-img" src="bellabeat/plots/01_avg_steps_weekday.png" alt="Bellabeat Preview">
+            <div class="p-3">
+              <h5 class="text-white mb-1">Bellabeat Fitbit Case Study</h5>
+              <p class="muted small mb-2">Steps, sleep, calories, intensity mix → actionable marketing recs.</p>
+              <div class="mb-3">
+                <span class="chip">R</span><span class="chip">ggplot2</span><span class="chip">EDA</span>
+              </div>
+              <div class="d-flex gap-2">
+                <a class="btn btn-sm btn-outline-light" href="bellabeat/Bellabeat_Case_Study.html">Report</a>
+                <a class="btn btn-sm btn-outline-light" href="bellabeat/Bellabeat_Case_Study.pdf">PDF</a>
+                <a class="btn btn-sm btn-outline-warning" href="https://github.com/tjf2015/bellabeat-fitbit-case-study" target="_blank">Code</a>
+              </div>
             </div>
           </div>
-        </article>
-        
-        <article class="rounded-2xl bg-white border border-slate-200 shadow-card overflow-hidden">
-          <a href="assets/bellabeat_cover.png" target="_blank"><img src="assets/bellabeat_cover.png" alt="Bellabeat preview"
-               class="w-full h-44 object-cover bg-white"></img></a>
-          <div class="p-4">
-            <h3 class="font-semibold">Bellabeat Fitbit Case Study</h3>
-            <p class="text-sm text-slate-700 mt-1">
-              Analyzed Fitbit data to provide actionable marketing recommendations based on user behavior patterns.
-            </p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="chip text-xs rounded-full px-2 py-1">R</span>
-              <span class="chip text-xs rounded-full px-2 py-1">ggplot2</span>
-              <span class="chip text-xs rounded-full px-2 py-1">EDA</span>
+        </div>
 
-              <a class="chip text-xs rounded-full px-2 py-1"
-                 href="bellabeat/Bellabeat_Case_Study.html"target="_blank" rel="noopener noreferrer">Report</a>
-              <a class="chip text-xs rounded-full px-2 py-1"
-                 href="https://github.com/tjf2015/bellabeat-fitbit-case-study" target="_blank" rel="noopener">Code</a>
+        <!-- Add more project cards as you build new work -->
+        <div class="col-md-6 col-lg-4">
+          <div class="project-card h-100">
+            <img class="project-img" src="https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?q=80&w=1200&auto=format&fit=crop" alt="Placeholder Project">
+            <div class="p-3">
+              <h5 class="text-white mb-1">Coming Soon</h5>
+              <p class="muted small mb-2">Add your next project here — data pipeline, dashboard, or ML mini‑build.</p>
+              <div class="mb-3">
+                <span class="chip">Python</span><span class="chip">Pandas</span><span class="chip">SQL</span>
+              </div>
+              <a class="btn btn-sm btn-outline-light disabled" href="#">Report</a>
             </div>
           </div>
-        </article>
+        </div>
 
-        <article class="rounded-2xl bg-white border border-slate-200 shadow-card overflow-hidden">
-          <a href="assets/cover_excel.png" target="_blank"><img src="assets/cover_excel.png"
-               alt="Excel spreadsheet project" class="w-full h-44 object-cover"></img></a>
-          <div class="p-4">
-            <h3 class="font-semibold">Advanced Excel Journal</h3>
-            <p class="text-sm text-slate-700 mt-1">A structured journaling tool using locked fields, conditional formatting, and clear layouts for precise data entry.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="chip text-xs rounded-full px-2 py-1">Excel</span>
-              <span class="chip text-xs rounded-full px-2 py-1">Data Validation</span>
-              <span class="chip text-xs rounded-full px-2 py-1">Automation</span>
-            </div>
-
-              <a class="chip text-xs rounded-full px-2 py-1"
-                 href="https://docs.google.com/spreadsheets/d/1Yqj9JgHTt5inD6AEvESsb7O7t0jY2H1VLbdqpBc4B6E/edit?usp=sharing"target="_blank" rel="noopener noreferrer">Link to Google Sheets</a>
-
-          </div>
-        </article>
       </div>
     </div>
   </section>
 
-  <section id="resume" class="py-12">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-extrabold mb-8">Professional Journey</h2>
-
-      <div class="relative border-l-2 border-slate-200 pl-8">
-        <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">iOS Consultant-in-Training</h4>
-            <p class="font-semibold text-slate-700">Rave Business Systems</p>
-            <p class="mt-2 text-slate-700">Assisted in migrating legacy Objective-C code to SwiftUI, focusing on UI implementation and data integration within an Agile framework. Gained hands-on experience in backend development, security best practices, and collaborative documentation.</p>
+  <!-- RESUME -->
+  <section id="resume" class="py-5">
+    <div class="container">
+      <h2 class="section-title mb-4">Resume</h2>
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <div class="timeline position-relative">
+            <div class="position-relative mb-4">
+              <div class="dot"></div>
+              <h6 class="mb-0">Data Analyst (Projects)</h6>
+              <small class="muted">2024 — Present</small>
+              <p class="muted mt-2">Built analytics projects across fitness and behavior data. Shipped reproducible R Markdown workflows and presentation decks with measurable recommendations.</p>
+            </div>
+            <div class="position-relative mb-4">
+              <div class="dot"></div>
+              <h6 class="mb-0">Google Data Analytics Certificate</h6>
+              <small class="muted">2025</small>
+              <p class="muted mt-2">Case study: Bellabeat. EDA, visualization, and storytelling with R/ggplot2.</p>
+            </div>
+          </div>
         </div>
-        <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">Full-Stack Developer Trainee</h4>
-            <p class="font-semibold text-slate-700">Coding Dojo</p>
-            <p class="mt-2 text-slate-700">Completed an intensive bootcamp, mastering MERN, Python/Django, and Java/Spring stacks. Developed and deployed full-stack applications on AWS, graduating top of the class with full marks on all assessments.</p>
-        </div>
-        <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">Lead Mechanic & Inspector</h4>
-            <p class="font-semibold text-slate-700">AeroGuard Flight Training Center</p>
-            <p class="mt-2 text-slate-700">Managed FAA-regulated maintenance logs, vendor contracts, and purchasing. Oversaw scheduling, documentation, and record retention while troubleshooting complex avionics systems on G1000-equipped aircraft and Redbird simulators.</p>
-        </div>
-        <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">Member Service Representative</h4>
-            <p class="font-semibold text-slate-700">USAA</p>
-            <p class="mt-2 text-slate-700">Processed financial transactions and conducted account audits with 100% accuracy. Handled sensitive personal and financial data in compliance with strict regulatory and privacy standards.</p>
-        </div>
-        <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">Apache Helicopter Maintenance Sergeant</h4>
-            <p class="font-semibold text-slate-700">U.S. Army</p>
-            <p class="mt-2 text-slate-700">Oversaw equipment documentation, mission checklists, and inventory tracking for multimillion-dollar assets. Conducted audits and inspections to ensure adherence to operational, safety, and security standards.</p>
+        <div class="col-lg-5">
+          <div class="section-card p-4">
+            <h5 class="mb-3">Skills</h5>
+            <div class="row">
+              <div class="col-6">
+                <ul class="list-unstyled small muted">
+                  <li>R, Python, SQL</li>
+                  <li>ggplot2, dplyr</li>
+                  <li>Pandas, Matplotlib</li>
+                </ul>
+              </div>
+              <div class="col-6">
+                <ul class="list-unstyled small muted">
+                  <li>Tableau</li>
+                  <li>Git & GitHub</li>
+                  <li>Storytelling</li>
+                </ul>
+              </div>
+            </div>
+            <a class="btn btn-outline-light mt-2" href="assets/T_Foltz_AA.pdf"><i class="bi bi-download me-2"></i>Download Resume</a>
+          </div>
         </div>
       </div>
-       <div class="mt-6 text-center">
-            <!-- <a class="inline-block border border-slate-300 rounded-lg px-4 py-2 hover:bg-slate-50"
-               href="assets/T_Foltz_AA.pdf" target="_blank" rel="noopener"><i class="bi bi-download mr-2"></i> Download Full Resume (PDF)</a> -->
-        </div>
     </div>
   </section>
 
