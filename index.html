@@ -8,20 +8,21 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
+      // Enabling class-based dark mode
+      darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            // New vibrant color scheme
             brand: {
-              primary: '#8A2BE2', // A nice, bright purple (BlueViolet)
-              secondary: '#00CED1', // A vibrant teal (DarkTurquoise)
-              accent: '#FF1493' // A bright pink for accents (DeepPink)
+              primary: '#7C3AED',   // Purple
+              secondary: '#FF6A00',  // Orange
+              accent: '#22C55E',    // Green (NEW)
             },
-            ink: '#1e293b',
-            soft: '#f8fafc'
+            ink: '#1e293b', // Dark text for light mode
+            soft: '#f8fafc' // Light text for dark mode
           },
           boxShadow: {
-            card: '0 12px 30px rgba(138,43,226,.12), 0 6px 16px rgba(0,0,0,.06)'
+            card: '0 12px 30px rgba(124,58,237,.14), 0 6px 16px rgba(0,0,0,.06)'
           }
         }
       }
@@ -31,26 +32,147 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <style>
-    /* Updated vibe with new colors */
-    .page-bg {
-      background:
-        radial-gradient(900px 400px at 10% -5%, rgba(138,43,226,.12), transparent 55%),
-        radial-gradient(700px 350px at 95% 0%, rgba(0,206,209,.10), transparent 60%),
-        linear-gradient(180deg, #ffffff 0%, #fbfbff 50%, #ffffff 100%);
+  :root{
+    --brand-purple: #7C3AED;
+    --brand-orange: #FF6A00;
+    --brand-green:  #22C55E; /* Changed from cyan to green */
+    --bg-top:       #F7F5FF;
+    --bg-mid:       #FFF7F0;
+    --bg-bot:       #FFFFFF;
+  }
+
+  .dark {
+    --bg-top: #1a202c;
+    --bg-mid: #2d3748;
+    --bg-bot: #111827;
+  }
+
+  /* --- Background: subtle pattern + blobs --- */
+  .page-bg {
+    background:
+      radial-gradient(900px 400px at 10% -5%, rgba(124,58,237,.10), transparent 55%),
+      radial-gradient(700px 350px at 95% 0%, rgba(255,106,0,.08), transparent 60%),
+      radial-gradient(500px 250px at 50% 110%, rgba(34,197,94,.06), transparent 60%), /* Green blob */
+      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bot) 100%);
+    position: relative;
+    isolation: isolate;
+
+    /* smoother background fade */
+    transition: background .9s cubic-bezier(.22,.61,.36,1);
+  }
+  .dark .page-bg {
+     background:
+      radial-gradient(900px 400px at 10% -5%, rgba(124,58,237,.12), transparent 60%),
+      radial-gradient(700px 350px at 95% 0%, rgba(255,106,0,.10), transparent 65%),
+      radial-gradient(500px 250px at 50% 110%, rgba(34,197,94,.08), transparent 65%),
+      linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bot) 100%);
+
+     /* mirror the smooth fade in dark mode */
+     transition: background .9s cubic-bezier(.22,.61,.36,1);
+  }
+  .page-bg::before{
+    content:""; position: fixed; inset:0; z-index:-1;
+    background-image: radial-gradient(rgba(124,58,237,.07) 1px, transparent 1px);
+    background-size: 22px 22px;
+    mask-image: radial-gradient(80% 60% at 40% 0%, black, transparent 80%);
+  }
+  .dark .page-bg::before { background-image: radial-gradient(rgba(248,250,252,.05) 1px, transparent 1px); }
+
+  /* floating accent blob */
+  .hero-blob{
+    position:absolute; right:-60px; top:-60px; width:260px; height:260px;
+    background: radial-gradient(circle at 30% 30%, rgba(255,106,0,.18), transparent 40%),
+                radial-gradient(circle at 70% 70%, rgba(34,197,94,.18), transparent 45%), /* Green blob */
+                radial-gradient(circle at 50% 50%, rgba(124,58,237,.18), transparent 50%);
+    filter: blur(18px); border-radius: 40% 60% 55% 45%/55% 45% 55% 45%;
+    animation: blob 18s ease-in-out infinite;
+    pointer-events:none;
+  }
+  @keyframes blob { 0%{transform:translateY(0) rotate(0)} 50%{transform:translateY(12px) rotate(6deg)} 100%{transform:translateY(0) rotate(0)} }
+  @media (prefers-reduced-motion: reduce){ .hero-blob{animation:none} .hover-tilt:hover{transform:none} }
+
+  /* --- Chips --- */
+  .chip{ border:1px solid rgba(124,58,237,.28); background:rgba(124,58,237,.08); color:var(--brand-purple); }
+  .dark .chip{ border-color: rgba(124,58,237,.4); background:rgba(124,58,237,.15); }
+
+  /* --- Buttons: playful/pro --- */
+  .btn-quirk{
+    background-image: linear-gradient(90deg, var(--brand-purple), var(--brand-orange));
+    color:white; font-weight:700; border-radius:0.75rem; padding:0.75rem 1.25rem;
+    box-shadow:0 12px 30px rgba(124,58,237,.14), 0 6px 16px rgba(0,0,0,.06);
+    transition: filter .2s ease, transform .2s ease;
+  }
+  .btn-quirk .bi{ transition: transform .2s ease }
+  .btn-quirk:hover{ filter:brightness(1.06); transform: translateY(-1px) }
+  .btn-quirk:hover .bi{ transform: translateX(2px) }
+
+  /* --- Cards with gradient borders + slight tilt on hover --- */
+  .quirk-card{
+    /* smoother leave transitions for bg/shadow/transform */
+    transition:
+      transform .25s ease,
+      background-color .6s ease,
+      box-shadow .6s ease;
+    will-change: transform;
+  }
+  .quirk-card::before{
+    content:""; position:absolute; inset:-1px; z-index:-1; border-radius:inherit;
+    background: linear-gradient(135deg, rgba(124,58,237,.45), rgba(255,106,0,.45) 45%, rgba(34,197,94,.35)); /* Green in gradient */
+    filter: blur(12px); opacity:.0;
+
+    /* quicker on hover-in */
+    transition: opacity .22s ease-out;
+  }
+  .quirk-card:hover{ transform: translateY(-3px) rotate(-.25deg) }
+  .quirk-card:hover::before{
+    opacity:.75; /* slightly brighter for a nicer linger */
+    /* slower fade when leaving hover */
+    transition: opacity .7s ease .05s;
+  }
+  .proj-thumb{
+    /* smoother image scaling, slower on leave */
+    transition: transform .35s ease-out;
+  }
+  .quirk-card:hover .proj-thumb{
+    transform: scale(1.03);
+    transition: transform .6s ease;
+  }
+
+  /* --- Section heading underline: whimsical squiggle --- */
+  .squiggle::after{
+    content:""; position:absolute; left:0; right:0; bottom:-8px; height:10px;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 10"><path d="M0 5 Q 10 0 20 5 T 40 5 T 60 5 T 80 5 T 100 5 T 120 5" fill="none" stroke="%23FF6A00" stroke-width="2.5" stroke-linecap="round"/></svg>') center/auto 100% no-repeat;
+  }
+
+  /* --- Nav link hover underline --- */
+  .navlink::after{ content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; background: linear-gradient(90deg, var(--brand-purple), var(--brand-orange)); transform:scaleX(0); transform-origin:left; transition:transform .2s ease }
+  .navlink:hover::after{ transform:scaleX(1) }
+
+  /* --- Timeline dots: branded gradient --- */
+  .dot-grad{ background: linear-gradient(90deg, var(--brand-purple), var(--brand-orange)); }
+
+  /* --- Smooth scroll + account for sticky header --- */
+  html { scroll-behavior: smooth; }
+  #contact { scroll-margin-top: 88px; } /* adjust if header height changes */
+
+  /* Respect reduced motion for all the above */
+  @media (prefers-reduced-motion: reduce){
+    .page-bg,
+    .dark .page-bg,
+    .quirk-card,
+    .quirk-card::before,
+    .quirk-card:hover::before,
+    .proj-thumb,
+    .quirk-card:hover .proj-thumb {
+      transition: none !important;
     }
-    .chip {
-      border: 1px solid rgba(138,43,226,.28);
-      background: rgba(138,43,226,.08);
-      color: #8A2BE2; /* Matching text color for chips */
-    }
-    .btn-grad {
-      background-image: linear-gradient(90deg, #8A2BE2, #00CED1);
-    }
+    html { scroll-behavior: auto; }
+  }
   </style>
 </head>
-<body class="page-bg text-ink antialiased">
+<body class="page-bg text-ink dark:text-soft antialiased">
 
-  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
+  <header class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur border-b border-slate-200 dark:border-slate-700">
     <nav class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
       <a href="#" class="font-extrabold text-xl flex items-center gap-2">
         <span class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
@@ -58,49 +180,56 @@
         </span>
         Tim Foltz
       </a>
-      <div class="hidden md:flex items-center gap-6">
-        <a href="#about" class="hover:text-brand-primary">About</a>
-        <a href="#focus" class="hover:text-brand-primary">Skills</a>
-        <a href="#projects" class="hover:text-brand-primary">Projects</a>
-        <a href="#resume" class="hover:text-brand-primary">Experience</a>
-        <a href="#contact" class="hover:text-brand-primary">Contact</a>
+      <div class="flex items-center">
+        <div class="hidden md:flex items-center gap-6">
+          <a href="#about" class="navlink hover:text-brand-primary">About</a>
+          <a href="#focus" class="navlink hover:text-brand-primary">Skills</a>
+          <a href="#projects" class="navlink hover:text-brand-primary">Projects</a>
+          <a href="#resume" class="navlink hover:text-brand-primary">Experience</a>
+          <a href="#contact" class="navlink hover:text-brand-primary">Contact</a>
+        </div>
+        <button id="themeToggle" class="ml-6 text-2xl hover:text-brand-primary" aria-label="Toggle theme">
+          <i class="bi bi-sun-fill hidden dark:inline"></i>
+          <i class="bi bi-moon-stars-fill inline dark:hidden"></i>
+        </button>
+        <button id="menuBtn" class="md:hidden text-2xl ml-4" aria-label="Open menu"><i class="bi bi-list"></i></button>
       </div>
-      <button id="menuBtn" class="md:hidden text-2xl" aria-label="Open menu"><i class="bi bi-list"></i></button>
     </nav>
-    <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200">
+    <div id="mobileMenu" class="md:hidden hidden border-t border-slate-200 dark:border-slate-700">
       <div class="mx-auto max-w-6xl px-4 py-3 flex flex-col gap-2">
-        <a href="#about" class="hover:text-brand-primary">About</a>
-        <a href="#focus" class="hover:text-brand-primary">Skills</a>
-        <a href="#projects" class="hover:text-brand-primary">Projects</a>
-        <a href="#resume" class="hover:text-brand-primary">Experience</a>
-        <a href="#contact" class="hover:text-brand-primary">Contact</a>
+        <a href="#about" class="navlink hover:text-brand-primary">About</a>
+        <a href="#focus" class="navlink hover:text-brand-primary">Skills</a>
+        <a href="#projects" class="navlink hover:text-brand-primary">Projects</a>
+        <a href="#resume" class="navlink hover:text-brand-primary">Experience</a>
+        <a href="#contact" class="navlink hover:text-brand-primary">Contact</a>
       </div>
     </div>
   </header>
 
   <section id="about" class="pt-14 pb-10">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-10 items-center">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 grid lg:grid-cols-12 gap-10 items-center relative">
+      <div class="hero-blob" aria-hidden="true"></div>
       <div class="lg:col-span-7">
         <span class="inline-flex items-center gap-2 text-sm font-semibold bg-brand-primary/10 text-brand-primary border border-brand-primary/20 px-3 py-1 rounded-full">
           <i class="bi bi-stars"></i> Software Development • Data Analytics • Technical Operations
         </span>
-        <h1 class="text-4xl sm:text-5xl font-extrabold mt-4">
+        <h1 class="text-4xl sm:text-5xl font-extrabold mt-4 dark:text-white">
           A Full-Stack Developer with a foundation in systems and data.
         </h1>
-        <p class="mt-4 text-slate-700 leading-relaxed">
-         I’m Tim, and I thrive on solving problems—whether it was keeping Apache helicopters mission-ready in the Army, troubleshooting software, or finding insights hidden in messy datasets. With 17 years of high-stakes experience in military aviation, I bring discipline, precision, and the ability to stay calm under pressure into everything I do. I’ve transitioned from wrenching on multimillion-dollar helicopters to coding full-stack applications and analyzing data to drive business decisions.<br><br>
+        <p class="mt-4 text-slate-700 dark:text-slate-300 leading-relaxed">
+I’m Tim, and I thrive on solving problems, whether it was keeping Apache helicopters mission-ready in the Army, troubleshooting software, or finding insights hidden in messy datasets. With 17 years of high-stakes experience in military and civilian aviation, I bring discipline, precision, and the ability to stay calm under pressure into everything I do. I’ve transitioned from wrenching on multimillion-dollar helicopters to coding full-stack applications and analyzing data to drive business decisions.<br><br>
 
-        But I’m more than my work history. I’m a lifelong learner who loves building things—apps, data visualizations, and even intricate Excel sheets that make life easier. Outside of tech, I’m a husband, dad, and family-first person who values the people closest to me above all else. I recharge by hiking Arizona trails, hitting the gym, camping under the stars, and yes—dancing (because life should be fun).<br><br>
-        I believe in blending professionalism with personality. I want any team I join to know they’re not just getting a reliable problem-solver—they’re getting someone who shows up with curiosity, resilience, and a sense of humor.
-        </p>
-         <p class="mt-4 text-slate-700 leading-relaxed">
-          When I'm not coding or analyzing data, I'm family-first, usually with <span style="color: #8400ff; "><strong>purple</strong></span> hair—who loves gaming, Harry Potter, hiking, camping, and hitting the gym.
+But I’m more than my work history. I’m a lifelong learner who loves building things: apps, data visualizations, and even intricate Excel sheets that make life easier. Outside of tech, I’m a husband, dad, and family-first person who values the people closest to me above all else. I recharge by hiking Arizona trails, hitting the gym, camping under the stars, and yes, dancing, because life should be fun.<br><br>
+
+I believe in blending professionalism with personality. I want any team I join to know they’re not just getting a reliable problem-solver, but someone who shows up with curiosity, resilience, and a sense of humor.
+
+</p> <p class="mt-4 text-slate-700 dark:text-slate-300 leading-relaxed"> When I'm not coding or analyzing data, I'm family-first, usually with <span style="color: #7C3AED;"><strong>purple</strong></span> hair, and I love gaming, Harry Potter, hiking, camping, and hitting the gym.
         </p>
         <div class="flex flex-wrap gap-3 mt-6">
-          <a href="#projects" class="btn-grad text-white font-bold px-5 py-3 rounded-lg shadow-md hover:brightness-105">
+          <a href="#projects" class="btn-quirk text-white font-bold px-5 py-3 rounded-lg shadow-md hover:brightness-105">
             <i class="bi bi-grid-3x3-gap-fill mr-2"></i> See My Work
           </a>
-          <a href="mailto:tjfoltz2@gmail.com" class="border border-brand-primary/40 text-brand-primary px-5 py-3 rounded-lg hover:bg-brand-primary/10">
+          <a href="#contact" class="border border-brand-primary/40 text-brand-primary px-5 py-3 rounded-lg hover:bg-brand-primary/10">
             <i class="bi bi-envelope mr-2"></i> Email Me
           </a>
           <a href="https://www.linkedin.com/in/timothy-j-foltz/" target="_blank" rel="noopener"
@@ -110,63 +239,63 @@
         </div>
       </div>
       <div class="lg:col-span-5">
-        <div class="rounded-2xl p-2 bg-white border border-slate-200 shadow-card">
-          <img src="assets/Tim_profile_pic.png" alt="Abstract code on a screen"
+        <div class="rounded-2xl p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-card">
+          <img src="assets/Tim_profile_pic.png" alt="Tim Foltz profile picture"
                class="w-full h-auto rounded-xl bg-white object-cover">
         </div>
-        <p class="text-xs text-slate-500 mt-2 text-center">I build clean code and derive clear insights from data.</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 text-center">I build clean code and derive clear insights from data.</p>
       </div>
     </div>
   </section>
 
   <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-    <div class="h-px bg-gradient-to-r from-transparent via-slate-300 to-transparent"></div>
+    <div class="h-px bg-gradient-to-r from-transparent via-slate-300 dark:via-slate-700 to-transparent"></div>
   </div>
 
   <section id="focus" class="py-12">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-extrabold mb-6">What I Do</h2>
+      <h2 class="text-3xl font-extrabold mb-6 squiggle dark:text-white">What I Do</h2>
 
       <div class="grid lg:grid-cols-3 gap-6">
-        <div class="rounded-2xl p-6 bg-white border border-slate-200 shadow-card">
+        <div class="rounded-2xl p-6 quirk-card bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700">
           <div class="flex items-center gap-3 mb-2">
             <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
               <i class="bi bi-braces"></i>
             </span>
-            <h3 class="text-xl font-bold">Software Development</h3>
+            <h3 class="text-xl font-bold dark:text-white">Software Development</h3>
           </div>
-          <p class="text-slate-700 mb-4">I build and deploy full-stack applications with a focus on clean, scalable code and intuitive user experiences.</p>
-          <ul class="list-disc pl-5 text-slate-700 space-y-1">
+          <p class="text-slate-700 dark:text-slate-300 mb-4">I build and deploy full-stack applications with a focus on clean, scalable code and intuitive user experiences.</p>
+          <ul class="list-disc pl-5 text-slate-700 dark:text-slate-300 space-y-1">
             <li><strong>Languages:</strong> Python, Java, Swift, JavaScript</li>
             <li><strong>Frameworks:</strong> React, Node.js, Django, Spring Boot</li>
             <li><strong>Tools:</strong> AWS, Git, Docker, Agile/Scrum</li>
           </ul>
         </div>
 
-        <div class="rounded-2xl p-6 bg-white border border-slate-200 shadow-card">
+        <div class="rounded-2xl p-6 quirk-card bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700">
           <div class="flex items-center gap-3 mb-2">
             <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-secondary/10 text-brand-secondary">
               <i class="bi bi-graph-up-arrow"></i>
             </span>
-            <h3 class="text-xl font-bold">Data Analytics</h3>
+            <h3 class="text-xl font-bold dark:text-white">Data Analytics</h3>
           </div>
-          <p class="text-slate-700 mb-4">I transform raw data into actionable insights through cleaning, analysis, and compelling visualizations.</p>
-          <ul class="list-disc pl-5 text-slate-700 space-y-1">
+          <p class="text-slate-700 dark:text-slate-300 mb-4">I transform raw data into actionable insights through cleaning, analysis, and compelling visualizations.</p>
+          <ul class="list-disc pl-5 text-slate-700 dark:text-slate-300 space-y-1">
             <li><strong>Tools:</strong> Excel, SQL, R, Tableau</li>
             <li><strong>Libraries:</strong> Pandas, NumPy, Matplotlib, ggplot2</li>
             <li><strong>Skills:</strong> EDA, Data Viz, Reporting</li>
           </ul>
         </div>
         
-        <div class="rounded-2xl p-6 bg-white border border-slate-200 shadow-card">
+        <div class="rounded-2xl p-6 quirk-card bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700">
           <div class="flex items-center gap-3 mb-2">
             <span class="inline-flex h-9 w-9 items-center justify-center rounded-full bg-brand-accent/10 text-brand-accent">
               <i class="bi bi-clipboard-check"></i>
             </span>
-            <h3 class="text-xl font-bold">Technical Operations</h3>
+            <h3 class="text-xl font-bold dark:text-white">Technical Operations</h3>
           </div>
-          <p class="text-slate-700 mb-4">I ensure smooth operations through meticulous documentation, process improvement, and compliance management.</p>
-          <ul class="list-disc pl-5 text-slate-700 space-y-1">
+          <p class="text-slate-700 dark:text-slate-300 mb-4">I ensure smooth operations through meticulous documentation, process improvement, and compliance management.</p>
+          <ul class="list-disc pl-5 text-slate-700 dark:text-slate-300 space-y-1">
             <li><strong>Skills:</strong> System Troubleshooting, Project Coordination</li>
             <li><strong>Compliance:</strong> FAA & Military Regulations</li>
             <li><strong>Support:</strong> Vendor Management, Record-Keeping</li>
@@ -177,149 +306,206 @@
   </section>
 
   <section id="projects" class="py-12">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-extrabold mb-6">Projects</h2>
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-extrabold mb-6 squiggle dark:text-white">Projects</h2>
 
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <article class="rounded-2xl bg-white border border-slate-200 shadow-card overflow-hidden">
-          <a href="assets/dbt_journal_app.png" target="_blank"><img src="assets/dbt_journal_app.png" alt="DBT Journal App preview"
-               class="w-full h-44 object-cover bg-white"></img></a>
-          <div class="p-4">
-            <h3 class="font-semibold">DBT Journal Desktop App</h3>
-            <p class="text-sm text-slate-700 mt-1">
-             A self-reflection and tracking application designed to support Dialectical Behavior Therapy (DBT) practices. 
-             This project allows users to log their daily emotions, urges, and actions, while also recording the DBT skills they used throughout the day.
-            </p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="chip text-xs rounded-full px-2 py-1">Python</span>
-              <span class="chip text-xs rounded-full px-2 py-1">JSON</span>
-              <span class="chip text-xs rounded-full px-2 py-1">UI/UX</span>
-              <div>
-                <a class="border border-slate-300 rounded-lg px-3 py-2 text-sm hover:bg-slate-50"
-                  href="https://dbt-daily-journal-foltz2.streamlit.app/"target="_blank" rel="noopener noreferrer">Link to Demo</a>
-              </div>
-            </div>
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article class="rounded-2xl quirk-card overflow-hidden bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700">
+        <a href="https://dbt-daily-journal-foltz2.streamlit.app/" target="_blank" rel="noopener">
+          <img src="assets/dbt_journal_app.png" alt="DBT Journal App preview"
+               class="w-full h-44 object-cover bg-white proj-thumb">
+        </a>
+        <div class="p-4">
+          <h3 class="font-semibold dark:text-white">DBT Journal Desktop App</h3>
+          <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">
+            A self-reflection and tracking application designed to support Dialectical Behavior Therapy (DBT) practices. This project allows users to log their daily emotions, urges, and actions, while also recording the DBT skills they used throughout the day.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="chip text-xs rounded-full px-2 py-1">Python</span>
+            <span class="chip text-xs rounded-full px-2 py-1">JSON</span>
+            <span class="chip text-xs rounded-full px-2 py-1">UI/UX</span>
           </div>
-        </article>
-        
-        <article class="rounded-2xl bg-white border border-slate-200 shadow-card overflow-hidden">
-          <a href="assets/bellabeat_cover.png" target="_blank"><img src="assets/bellabeat_cover.png" alt="Bellabeat preview"
-               class="w-full h-44 object-cover bg-white"></img></a>
-          <div class="p-4">
-            <h3 class="font-semibold">Bellabeat Fitbit Case Study</h3>
-            <p class="text-sm text-slate-700 mt-1">
-              Analyzed Fitbit data to provide actionable marketing recommendations based on user behavior patterns.
-            </p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="chip text-xs rounded-full px-2 py-1">R</span>
-              <span class="chip text-xs rounded-full px-2 py-1">ggplot2</span>
-              <span class="chip text-xs rounded-full px-2 py-1">EDA</span>
-            </div>
-            <div class="mt-4 flex gap-2 flex-wrap">
-              <a class="border border-slate-300 rounded-lg px-3 py-2 text-sm hover:bg-slate-50"
-                 href="bellabeat/Bellabeat_Case_Study.html"target="_blank" rel="noopener noreferrer">Report</a>
-              <a class="border border-brand-secondary/50 text-brand-secondary rounded-lg px-3 py-2 text-sm hover:bg-brand-secondary/10"
-                 href="https://github.com/tjf2015/bellabeat-fitbit-case-study" target="_blank" rel="noopener">Code</a>
-            </div>
+          <div class="mt-4">
+            <a class="border border-brand-secondary text-brand-secondary rounded-lg px-3 py-2 text-sm hover:bg-white hover:border-ink hover:text-ink dark:hover:bg-white dark:hover:border-ink dark:hover:text-ink"
+               href="https://dbt-daily-journal-foltz2.streamlit.app/" target="_blank" rel="noopener noreferrer">Link to Demo</a>
           </div>
-        </article>
+        </div>
+      </article>
 
-        <article class="rounded-2xl bg-white border border-slate-200 shadow-card overflow-hidden">
-          <a href="assets/cover_excel.png" target="_blank"><img src="assets/cover_excel.png"
-               alt="Excel spreadsheet project" class="w-full h-44 object-cover"></img></a>
-          <div class="p-4">
-            <h3 class="font-semibold">Advanced Excel Journal</h3>
-            <p class="text-sm text-slate-700 mt-1">A structured journaling tool using locked fields, conditional formatting, and clear layouts for precise data entry.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="chip text-xs rounded-full px-2 py-1">Excel</span>
-              <span class="chip text-xs rounded-full px-2 py-1">Data Validation</span>
-              <span class="chip text-xs rounded-full px-2 py-1">Automation</span>
-            </div>
-            <div class="mt-4 flex gap-2 flex-wrap">
-              <a class="border border-slate-300 rounded-lg px-3 py-2 text-sm hover:bg-slate-50"
-                 href="https://docs.google.com/spreadsheets/d/1Yqj9JgHTt5inD6AEvESsb7O7t0jY2H1VLbdqpBc4B6E/edit?usp=sharing"target="_blank" rel="noopener noreferrer">Link to Google Sheets</a>
-            </div>
+      <article class="rounded-2xl quirk-card overflow-hidden bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700">
+        <a href="bellabeat/Bellabeat_Case_Study.html" target="_blank" rel="noopener">
+          <img src="assets/bellabeat_cover.png" alt="Bellabeat preview"
+               class="w-full h-44 object-cover bg-white proj-thumb">
+        </a>
+        <div class="p-4">
+          <h3 class="font-semibold dark:text-white">Bellabeat Fitbit Case Study</h3>
+          <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">
+            Analyzed Fitbit data to provide actionable marketing recommendations based on user behavior patterns.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="chip text-xs rounded-full px-2 py-1">R</span>
+            <span class="chip text-xs rounded-full px-2 py-1">ggplot2</span>
+            <span class="chip text-xs rounded-full px-2 py-1">EDA</span>
           </div>
-        </article>
-      </div>
+          <div class="mt-4 flex gap-2 flex-wrap">
+            <a class="border border-brand-secondary text-brand-secondary rounded-lg px-3 py-2 text-sm hover:bg-white hover:border-ink hover:text-ink dark:hover:bg-white dark:hover:border-ink dark:hover:text-ink"
+               href="bellabeat/Bellabeat_Case_Study.html" target="_blank" rel="noopener noreferrer">Report</a>
+            <a class="border border-brand-secondary text-brand-secondary rounded-lg px-3 py-2 text-sm hover:bg-white hover:border-ink hover:text-ink dark:hover:bg-white dark:hover:border-ink dark:hover:text-ink"
+               href="https://github.com/tjf2015/bellabeat-fitbit-case-study" target="_blank" rel="noopener">Code</a>
+            <a class="border border-brand-secondary text-brand-secondary rounded-lg px-3 py-2 text-sm hover:bg-white hover:border-ink hover:text-ink dark:hover:bg-white dark:hover:border-ink dark:hover:text-ink"
+               href="https://docs.google.com/presentation/d/1iAknJUWSrVSNrhWiy5mKDCd-PKvjsmMBs0Z93SStYbE/template/preview" target="_blank" rel="noopener">Slide Deck</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="rounded-2xl quirk-card overflow-hidden bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700">
+        <a href="https://docs.google.com/spreadsheets/d/1Yqj9JgHTt5inD6AEvESsb7O7t0jY2H1VLbdqpBc4B6E/edit?usp=sharing" target="_blank" rel="noopener">
+          <img src="assets/cover_excel.png" alt="Excel spreadsheet project"
+               class="w-full h-44 object-cover proj-thumb">
+        </a>
+        <div class="p-4">
+          <h3 class="font-semibold dark:text-white">Advanced Excel Journal</h3>
+          <p class="text-sm text-slate-700 dark:text-slate-300 mt-1">
+            A structured journaling tool using locked fields, conditional formatting, and clear layouts for precise data entry.
+          </p>
+          <div class="mt-3 flex flex-wrap gap-2">
+            <span class="chip text-xs rounded-full px-2 py-1">Excel</span>
+            <span class="chip text-xs rounded-full px-2 py-1">Data Validation</span>
+            <span class="chip text-xs rounded-full px-2 py-1">Automation</span>
+          </div>
+          <div class="mt-4 flex gap-2 flex-wrap">
+            <a class="border border-brand-secondary text-brand-secondary rounded-lg px-3 py-2 text-sm hover:bg-white hover:border-ink hover:text-ink dark:hover:bg-white dark:hover:border-ink dark:hover:text-ink"
+               href="https://docs.google.com/spreadsheets/d/1Yqj9JgHTt5inD6AEvESsb7O7t0jY2H1VLbdqpBc4B6E/copy" target="_blank" rel="noopener noreferrer">Link to Google Sheets</a>
+          </div>
+        </div>
+      </article>
     </div>
-  </section>
+  </div>
+</section>
+
 
   <section id="resume" class="py-12">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-extrabold mb-8">Professional Journey</h2>
+      <h2 class="text-3xl font-extrabold mb-8 squiggle dark:text-white">Professional Journey</h2>
 
-      <div class="relative border-l-2 border-slate-200 pl-8">
+      <div class="relative border-l-2 border-slate-200 dark:border-slate-700 pl-8">
         <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">iOS Consultant-in-Training</h4>
-            <p class="font-semibold text-slate-700">Rave Business Systems</p>
-            <p class="mt-2 text-slate-700">Assisted in migrating legacy Objective-C code to SwiftUI, focusing on UI implementation and data integration within an Agile framework. Gained hands-on experience in backend development, security best practices, and collaborative documentation.</p>
+            <div class="absolute -left-[9px] w-4 h-4 rounded-full dot-grad" style="top: 0.25rem;"></div>
+            <p class="text-slate-600 dark:text-slate-400 text-sm"></p>
+            <h4 class="font-bold text-lg dark:text-white">iOS Consultant-in-Training</h4>
+            <p class="font-semibold text-slate-700 dark:text-slate-300">Rave Business Systems</p>
+            <p class="mt-2 text-slate-700 dark:text-slate-300">Assisted in migrating legacy Objective-C code to SwiftUI, focusing on UI implementation and data integration within an Agile framework. Gained hands-on experience in backend development, security best practices, and collaborative documentation.</p>
         </div>
         <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">Full-Stack Developer Trainee</h4>
-            <p class="font-semibold text-slate-700">Coding Dojo</p>
-            <p class="mt-2 text-slate-700">Completed an intensive bootcamp, mastering MERN, Python/Django, and Java/Spring stacks. Developed and deployed full-stack applications on AWS, graduating top of the class with full marks on all assessments.</p>
+            <div class="absolute -left-[9px] w-4 h-4 rounded-full dot-grad" style="top: 0.25rem;"></div>
+            <p class="text-slate-600 dark:text-slate-400 text-sm"></p>
+            <h4 class="font-bold text-lg dark:text-white">Full-Stack Developer Trainee</h4>
+            <p class="font-semibold text-slate-700 dark:text-slate-300">Coding Dojo</p>
+            <p class="mt-2 text-slate-700 dark:text-slate-300">Completed an intensive bootcamp, mastering MERN, Python/Django, and Java/Spring stacks. Developed and deployed full-stack applications on AWS, graduating top of the class with full marks on all assessments.</p>
         </div>
         <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">Lead Mechanic & Inspector</h4>
-            <p class="font-semibold text-slate-700">AeroGuard Flight Training Center</p>
-            <p class="mt-2 text-slate-700">Managed FAA-regulated maintenance logs, vendor contracts, and purchasing. Oversaw scheduling, documentation, and record retention while troubleshooting complex avionics systems on G1000-equipped aircraft and Redbird simulators.</p>
+            <div class="absolute -left-[9px] w-4 h-4 rounded-full dot-grad" style="top: 0.25rem;"></div>
+            <p class="text-slate-600 dark:text-slate-400 text-sm"></p>
+            <h4 class="font-bold text-lg dark:text-white">Lead Mechanic & Inspector</h4>
+            <p class="font-semibold text-slate-700 dark:text-slate-300">AeroGuard Flight Training Center</p>
+            <p class="mt-2 text-slate-700 dark:text-slate-300">Managed FAA-regulated maintenance logs, vendor contracts, and purchasing. Oversaw scheduling, documentation, and record retention while troubleshooting complex avionics systems on G1000-equipped aircraft and Redbird simulators.</p>
         </div>
         <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">Member Service Representative</h4>
-            <p class="font-semibold text-slate-700">USAA</p>
-            <p class="mt-2 text-slate-700">Processed financial transactions and conducted account audits with 100% accuracy. Handled sensitive personal and financial data in compliance with strict regulatory and privacy standards.</p>
+            <div class="absolute -left-[9px] w-4 h-4 rounded-full dot-grad" style="top: 0.25rem;"></div>
+            <p class="text-slate-600 dark:text-slate-400 text-sm"></p>
+            <h4 class="font-bold text-lg dark:text-white">Member Service Representative</h4>
+            <p class="font-semibold text-slate-700 dark:text-slate-300">USAA</p>
+            <p class="mt-2 text-slate-700 dark:text-slate-300">Processed financial transactions and conducted account audits with 100% accuracy. Handled sensitive personal and financial data in compliance with strict regulatory and privacy standards.</p>
         </div>
         <div class="mb-8">
-            <div class="absolute -left-[9px] w-4 h-4 rounded-full"
-                 style="background: linear-gradient(90deg, #8A2BE2, #00CED1); top: 0.25rem;"></div>
-            <p class="text-slate-600 text-sm"></p>
-            <h4 class="font-bold text-lg">Apache Helicopter Maintenance Sergeant</h4>
-            <p class="font-semibold text-slate-700">U.S. Army</p>
-            <p class="mt-2 text-slate-700">Oversaw equipment documentation, mission checklists, and inventory tracking for multimillion-dollar assets. Conducted audits and inspections to ensure adherence to operational, safety, and security standards.</p>
+            <div class="absolute -left-[9px] w-4 h-4 rounded-full dot-grad" style="top: 0.25rem;"></div>
+            <p class="text-slate-600 dark:text-slate-400 text-sm"></p>
+            <h4 class="font-bold text-lg dark:text-white">Apache Helicopter Maintenance Sergeant</h4>
+            <p class="font-semibold text-slate-700 dark:text-slate-300">U.S. Army</p>
+            <p class="mt-2 text-slate-700 dark:text-slate-300">Oversaw equipment documentation, mission checklists, and inventory tracking for multimillion-dollar assets. Conducted audits and inspections to ensure adherence to operational, safety, and security standards.</p>
         </div>
       </div>
        <div class="mt-6 text-center">
-            <!-- <a class="inline-block border border-slate-300 rounded-lg px-4 py-2 hover:bg-slate-50"
-               href="assets/T_Foltz_AA.pdf" target="_blank" rel="noopener"><i class="bi bi-download mr-2"></i> Download Full Resume (PDF)</a> -->
-        </div>
+       </div>
     </div>
   </section>
+  
+  <section id="education" class="py-12">
+  <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-extrabold mb-8 squiggle dark:text-white">Education</h2>
 
+    <div class="relative border-l-2 border-slate-200 dark:border-slate-700 pl-8">
+      
+      <div class="mb-8">
+        <div class="absolute -left-[9px] w-4 h-4 rounded-full dot-grad" style="top: 0.25rem;"></div>
+        <h4 class="font-bold text-lg dark:text-white">Bachelor of Science in Applied Computing</h4>
+        <p class="font-semibold text-slate-700 dark:text-slate-300">Arizona State University — Dec 2024</p>
+        <p class="mt-1 text-slate-600 dark:text-slate-400 text-sm">GPA: 3.5</p>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          Coursework included Data Science, Database Management, Cloud Computing, Software Engineering, 
+          Operating Systems and Cybersecurity. Strong foundation in Python, R, SQL, and Excel 
+          for analytics, along with systems design and applied project work.
+        </p>
+      </div>
+
+      <div class="mb-8">
+        <div class="absolute -left-[9px] w-4 h-4 rounded-full dot-grad" style="top: 0.25rem;"></div>
+        <h4 class="font-bold text-lg dark:text-white">Associate of Arts</h4>
+        <p class="font-semibold text-slate-700 dark:text-slate-300">Glendale Community College — Dec 2022</p>
+        <p class="mt-1 text-slate-600 dark:text-slate-400 text-sm">GPA: 3.8</p>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          Completed foundation courses in Computer Science, Economics, and Accounting. 
+          Gained skills in Java, C++, and database fundamentals while balancing rigorous coursework 
+          in both computing and business disciplines.
+        </p>
+      </div>
+
+      <div class="mb-8">
+        <div class="absolute -left-[9px] w-4 h-4 rounded-full dot-grad" style="top: 0.25rem;"></div>
+        <h4 class="font-bold text-lg dark:text-white">Full-Stack Software Development Bootcamp</h4>
+        <p class="font-semibold text-slate-700 dark:text-slate-300">Coding Dojo</p>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          Completed intensive training across three stacks: MERN (MongoDB, Express, React, Node.js), 
+          Python/Django, and Java/Spring Boot. Built and deployed full-stack applications with AWS integration, 
+          agile team collaboration, and UI/UX best practices.
+        </p>
+      </div>
+
+      <div class="mb-8">
+        <div class="absolute -left-[9px] w-4 h-4 rounded-full dot-grad" style="top: 0.25rem;"></div>
+        <h4 class="font-bold text-lg dark:text-white">Google Career Certificate in Data Analytics</h4>
+        <p class="font-semibold text-slate-700 dark:text-slate-300">Coursera</p>
+        <p class="mt-2 text-slate-700 dark:text-slate-300">
+          Training in data cleaning, analysis, and visualization using R, SQL, Excel, and Tableau. 
+          Coursework emphasizes real-world case studies, exploratory data analysis, and dashboard creation.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
 
   <section id="contact" class="py-12">
     <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-      <h2 class="text-3xl font-extrabold mb-3">Get in Touch</h2>
-      <p class="text-slate-700 mb-6">Have a role or project you think I’d be a great fit for? Let’s chat.</p>
-      <div class="rounded-2xl p-6 bg-white border border-slate-200 shadow-card">
-        <form action="https://formsubmit.co/tjfoltz2@gmail.com" method="POST" class="grid md:grid-cols-2 gap-4">
+      <h2 class="text-3xl font-extrabold mb-3 squiggle dark:text-white">Get in Touch</h2>
+      <p class="text-slate-700 dark:text-slate-300 mb-6">Have a role or project you think I’d be a great fit for? Let’s chat.</p>
+      <div class="rounded-2xl p-6 quirk-card bg-white dark:bg-slate-800 border border-slate-200/50 dark:border-slate-700">
+        <form action="https://formsubmit.co/d61562044654485bb8e8e714ed84aef3" method="POST" class="grid md:grid-cols-2 gap-4">
           <input type="hidden" name="_captcha" value="false">
           <div>
-            <label class="text-slate-600 text-sm block mb-1">Name</label>
-            <input name="name" required class="w-full rounded-lg border border-slate-300 px-3 py-3" placeholder="Your name">
+            <label class="text-slate-600 dark:text-slate-400 text-sm block mb-1">Name</label>
+            <input name="name" required class="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-3 bg-white dark:bg-slate-700 dark:text-white dark:placeholder-slate-400" placeholder="Your name">
           </div>
           <div>
-            <label class="text-slate-600 text-sm block mb-1">Email</label>
-            <input type="email" name="email" required class="w-full rounded-lg border border-slate-300 px-3 py-3" placeholder="you@example.com">
+            <label class="text-slate-600 dark:text-slate-400 text-sm block mb-1">Email</label>
+            <input type="email" name="email" required class="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-3 bg-white dark:bg-slate-700 dark:text-white dark:placeholder-slate-400" placeholder="you@example.com">
           </div>
           <div class="md:col-span-2">
-            <label class="text-slate-600 text-sm block mb-1">Message</label>
-            <textarea name="message" rows="4" required class="w-full rounded-lg border border-slate-300 px-3 py-3" placeholder="Tell me about your role or project..."></textarea>
+            <label class="text-slate-600 dark:text-slate-400 text-sm block mb-1">Message</label>
+            <textarea name="message" rows="4" required class="w-full rounded-lg border border-slate-300 dark:border-slate-600 px-3 py-3 bg-white dark:bg-slate-700 dark:text-white dark:placeholder-slate-400" placeholder="Tell me about your role or project..."></textarea>
           </div>
           <div class="md:col-span-2">
-            <button class="btn-grad text-white font-bold px-5 py-3 rounded-lg shadow-md hover:brightness-105" type="submit">
+            <button class="btn-quirk text-white font-bold px-5 py-3 rounded-lg shadow-md hover:brightness-105" type="submit">
               <i class="bi bi-send mr-2"></i> Send Message
             </button>
           </div>
@@ -328,13 +514,12 @@
     </div>
   </section>
 
-  <footer class="py-6 border-t border-slate-200 bg-white/70">
-    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-3 text-slate-600 text-sm">
+  <footer class="py-6 border-t border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-900/70">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-3 text-slate-600 dark:text-slate-400 text-sm">
       <p>© <span id="year"></span> Tim Foltz</p>
-      <div class="flex items-center gap-4">
-        <a class="hover:text-brand-primary" href="mailto:tjfoltz2@gmail.com"><i class="bi bi-envelope"></i></a>
-        <a class="hover:text-brand-primary" href="https://www.linkedin.com/in/timothy-j-foltz/" target="_blank" rel="noopener"><i class="bi bi-linkedin"></i></a>
-        <a class="hover:text-brand-primary" href="https://github.com/tjf2015" target="_blank" rel="noopener"><i class="bi bi-github"></i></a>
+      <div class="flex items-center gap-4 text-lg">
+        <a class="hover:text-brand-primary" href="https://www.linkedin.com/in/timothy-j-foltz/" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+        <a class="hover:text-brand-primary" href="https://github.com/tjf2015" target="_blank" rel="noopener" aria-label="GitHub"><i class="bi bi-github"></i></a>
       </div>
     </div>
   </footer>
@@ -346,6 +531,45 @@
     );
     // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // --- Dark Mode Toggle Script ---
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const htmlEl = document.documentElement;
+
+    // Function to set the theme
+    const setTheme = (theme) => {
+      if (theme === 'dark') {
+        htmlEl.classList.add('dark');
+      } else {
+        htmlEl.classList.remove('dark');
+      }
+      localStorage.setItem('theme', theme);
+    };
+
+    // Event listener for the toggle button
+    themeToggleBtn.addEventListener('click', () => {
+      const currentTheme = htmlEl.classList.contains('dark') ? 'light' : 'dark';
+      setTheme(currentTheme);
+    });
+
+    // Initialize theme on page load
+    const storedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if (storedTheme) {
+      setTheme(storedTheme);
+    } else {
+      setTheme(prefersDark ? 'dark' : 'light');
+    }
+
+    // --- Focus the Name field after scrolling to #contact ---
+    document.querySelectorAll('a[href="#contact"]').forEach(a => {
+      a.addEventListener('click', () => {
+        setTimeout(() => {
+          document.querySelector('#contact input[name="name"]')?.focus();
+        }, 350); // allow smooth scroll to complete
+      });
+    });
   </script>
 </body>
 </html>
