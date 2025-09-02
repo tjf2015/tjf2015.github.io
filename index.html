@@ -155,18 +155,30 @@
   html { scroll-behavior: smooth; }
   #contact { scroll-margin-top: 88px; } /* adjust if header height changes */
 
-  /* Respect reduced motion for all the above */
-  @media (prefers-reduced-motion: reduce){
-    .page-bg,
-    .dark .page-bg,
-    .quirk-card,
-    .quirk-card::before,
-    .quirk-card:hover::before,
-    .proj-thumb,
-    .quirk-card:hover .proj-thumb {
-      transition: none !important;
-    }
-    html { scroll-behavior: auto; }
+  /* --- Animated solid-color cycling (no gradient) --- */
+  .myriad {
+    animation: myriad-color-cycle 8s linear infinite;
+  }
+  @keyframes myriad-color-cycle {
+    /* red */
+    0%, 14%   { color: #ff0000; }
+    /* green */
+    15%, 29%  { color: #00a000; }
+    /* orange */
+    30%, 44%  { color: #fe6c04; }
+    /* yellow */
+    45%, 59%  { color: #e3b505; }
+    /* pink (breast cancer) */
+    60%, 69%  { color: #ff69b4; }
+    /* blue */
+    70%, 79%  { color: #0000ff; }
+    /* purple */
+    80%, 89%  { color: #7c3aed; }
+    /* teal */
+    90%, 100% { color: #14b8a6; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .myriad { animation: none; }
   }
   </style>
 </head>
@@ -223,7 +235,7 @@
         I believe in blending professionalism with personality. I want any team I join to know they’re not just getting a reliable problem-solver—they’re getting someone who shows up with curiosity, resilience, and a sense of humor.
         </p>
          <p class="mt-4 text-slate-700 dark:text-white leading-relaxed">
-          When I'm not coding or analyzing data, I'm family-first, usually with <span style="color: #8400ff; "><strong>purple</strong></span> hair—who loves gaming, Harry Potter, hiking, camping, and hitting the gym.
+          When I'm not coding or analyzing data, I'm family-first, usually with a <span class="myriad"><strong>myriad</strong></span> of color - who loves gaming, Harry Potter, hiking, camping, and hitting the gym.
         </p>
         <div class="flex flex-wrap gap-3 mt-6">
           <a href="#projects" class="btn-quirk text-white font-bold px-5 py-3 rounded-lg shadow-md hover:brightness-105">
